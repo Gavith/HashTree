@@ -39,6 +39,7 @@ public:
 
 	int hashFunc(Student* in);
 	void printStudents();
+	int countThings(HashEntry ** in, size_t size);
 private:
 	void resizeData(size_t newSize);
 
