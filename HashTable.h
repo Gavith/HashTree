@@ -1,5 +1,7 @@
 #pragma once
 #include <cstring>
+
+
 struct Student {
 	char* firstName;
 	char* lastName;
@@ -12,14 +14,35 @@ struct Student {
 	}
 };
 
+struct HashEntry {
+	Student* data;
+	HashEntry* next;
+
+	HashEntry() {
+		data = nullptr;
+		next = nullptr;
+	}
+
+	HashEntry(Student* data) {
+		this->data = data;
+		next = nullptr;
+	}
+};
+
 class HashTable
 {
 public:
 	HashTable();
 	~HashTable();
 
-	int hashFunc(Student* in, size_t arrSize);
+	void add(Student* in);
+
+	int hashFunc(Student* in);
+	void printStudents();
 private:
-	
+	void resizeData(size_t newSize);
+
+	size_t length = 100;
+	HashEntry ** data;
 };
 
