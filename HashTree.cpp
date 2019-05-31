@@ -9,12 +9,16 @@ using namespace std;
 
 Student* generateStudent(int &seed);
 int getFileLineNum(const char* name);
+char* stringToLower(char* in);
 
 int main()
 {
 	srand(time(NULL));
 	int seed = 100;//for incrementing the id in 
 	HashTable h = HashTable();
+
+
+
 	for (int i = 0; i < 50; i++) {
 		h.add(generateStudent(seed));
 	}
@@ -71,6 +75,13 @@ int getFileLineNum(const char* name)
 			++i;
 	f.close();
 	return i;
+}
+
+char * stringToLower(char * in)
+{
+	for (int i = 0; i < strlen(in); i++)
+		in[i] = tolower(in[i]);
+	return in;
 }
 
 

@@ -23,9 +23,7 @@ void HashTable::add(Student* in)
 	int index = hashFunc(in);
 	if (data[index] != nullptr) {//if there is an entry in the one im trying to add to
 		if (data[index] && data[index]->next) {//if theres already 2 of them
-			//resize the array
 			resizeData(length*2);
-			//printStudents();
 			cout << endl;
 			add(in);//add it recursively
 		}
@@ -37,6 +35,49 @@ void HashTable::add(Student* in)
 		data[index] = new HashEntry(in);
 	}
 	
+}
+
+void HashTable::remove(int index, bool chain)
+{
+	if (chain) {
+		delete data[index]->next;
+		data[index]->next = nullptr;
+	}
+	else {
+		if (data[index]->next) {
+			HashEntry* temp = data[index]->next;
+			delete data[index];
+			data[index] = temp;
+		}
+		else {
+			delete data[index];
+			data[index] = nullptr;
+		}
+		
+	}
+}
+
+void HashTable::remove(int id)
+{
+	for (int i = 0; i < length; i++) {
+		if (data[i]->data->id == id) {
+			if (data[i]->next) {
+				HashEntry* temp = data[i]->next;
+				delete data[i];
+				data[i] = temp;
+			}
+			else {
+				delete data[i];
+				data[i] = nullptr;
+			}
+			break;
+		}
+		else if (data[i]->next && data[i]->next->data->id == id) {
+			delete data[i]->next;
+			data[i]->next = nullptr;
+			break;
+		}
+	}
 }
 
 void HashTable::resizeData(size_t newSize)
@@ -101,16 +142,18 @@ void HashTable::printStudents()
 {
 	for (int i = 0; i < length; i++) {
 		if (data[i]) {
-			cout << i << " " << data[i]->data->firstName << " " << data[i]->data->lastName;
+			cout << i << " " << data[i]->data->firstName << " " << data[i]->data->lastName 
+				<< "(" << data[i]->data->id << ")";
 
 			if (data[i]->next) {
-				cout  << " -> " << data[i]->next->data->firstName << " " << data[i]->next->data->lastName;
+				cout  << " -> " << data[i]->next->data->firstName << " " << data[i]->next->data->lastName 
+					<< "(" << data[i]->next->data->id << ")";
 			}
 			cout << endl;
 		}
 	}
 }
-
+/*
 int HashTable::countThings(HashEntry ** in, size_t size)
 {
 	int h = 0;
@@ -125,5 +168,5 @@ int HashTable::countThings(HashEntry ** in, size_t size)
 	}
 	return h;
 }
-
+*/
 
