@@ -1,5 +1,4 @@
 #include "HashTable.h"
-#include <stdlib.h>
 #include <iostream>
 
 using namespace std;
@@ -60,7 +59,7 @@ void HashTable::remove(int index, bool chain)
 void HashTable::remove(int id)
 {
 	for (int i = 0; i < length; i++) {
-		if (data[i]->data->id == id) {
+		if (data[i] && data[i]->data->id == id) {
 			if (data[i]->next) {
 				HashEntry* temp = data[i]->next;
 				delete data[i];
@@ -72,7 +71,7 @@ void HashTable::remove(int id)
 			}
 			break;
 		}
-		else if (data[i]->next && data[i]->next->data->id == id) {
+		else if (data[i] && data[i]->next && data[i]->next->data->id == id) {
 			delete data[i]->next;
 			data[i]->next = nullptr;
 			break;
