@@ -6,7 +6,7 @@ using namespace std;
 HashTable::HashTable()
 {
 	data = new HashEntry*[100];
-
+	//initializing yay
 	for (int i = 0; i < length; i++) {
 		data[i] = nullptr;
 	}
@@ -14,7 +14,14 @@ HashTable::HashTable()
 
 
 HashTable::~HashTable()
-{
+{//make sure everything is gone
+	for (int i = 0; i < length; i++) {
+		if (data[i] && data[i]->next) {
+			delete data[i]->next;
+		}
+		delete data[i];
+	}
+	delete[] data;
 }
 
 void HashTable::add(Student* in)
@@ -38,17 +45,17 @@ void HashTable::add(Student* in)
 
 void HashTable::remove(int index, bool chain)
 {
-	if (chain) {
-		delete data[index]->next;
+	if (chain) {//if its the second
+		delete data[index]->next;//delete the second
 		data[index]->next = nullptr;
 	}
 	else {
-		if (data[index]->next) {
-			HashEntry* temp = data[index]->next;
+		if (data[index]->next) {//if there is a second
+			HashEntry* temp = data[index]->next;//replace
 			delete data[index];
 			data[index] = temp;
 		}
-		else {
+		else {//delete
 			delete data[index];
 			data[index] = nullptr;
 		}
@@ -58,9 +65,9 @@ void HashTable::remove(int index, bool chain)
 
 void HashTable::remove(int id)
 {
-	for (int i = 0; i < length; i++) {
+	for (int i = 0; i < length; i++) {//find it
 		if (data[i] && data[i]->data->id == id) {
-			if (data[i]->next) {
+			if (data[i]->next) {//if it has a chain
 				HashEntry* temp = data[i]->next;
 				delete data[i];
 				data[i] = temp;
@@ -71,7 +78,7 @@ void HashTable::remove(int id)
 			}
 			break;
 		}
-		else if (data[i] && data[i]->next && data[i]->next->data->id == id) {
+		else if (data[i] && data[i]->next && data[i]->next->data->id == id) {//if its the next
 			delete data[i]->next;
 			data[i]->next = nullptr;
 			break;
@@ -82,7 +89,7 @@ void HashTable::remove(int id)
 void HashTable::resizeData(size_t newSize)
 {
 	size_t oldSize = length;
-	HashEntry ** oldData = new HashEntry*[length];
+	HashEntry ** oldData = new HashEntry*[length];//copying the array
 	for (int i = 0; i < oldSize; i++)
 		oldData[i] = data[i];
 	
@@ -115,6 +122,7 @@ void HashTable::resizeData(size_t newSize)
 		}
 		
 	}
+	delete[] oldData;
 	
 }
 
@@ -123,15 +131,15 @@ void HashTable::resizeData(size_t newSize)
 int HashTable::hashFunc(Student * in)
 {
 	int f = 1; 
-	for (unsigned int i = 0; i < strlen(in->firstName); i++)
+	for (unsigned int i = 0; i < strlen(in->firstName); i++)//add up all chars
 		f += in->firstName[i]/3;
 	int l = 1; 
 	for (unsigned int i = 0; i < strlen(in->lastName); i++)
 		l += in->lastName[i]/3;
 
-	int total = (int)(in->gpa * (float)in->id/3 * abs(f-l));
+	int total = (int)(in->gpa * (float)in->id/3 * abs(f-l));// gpa*id*(names added and then subtracted)
 
-	return total % length;
+	return total % length;//make sure it fits
 }
 
 
@@ -139,33 +147,16 @@ int HashTable::hashFunc(Student * in)
 
 void HashTable::printStudents()
 {
-	for (int i = 0; i < length; i++) {
+	for (int i = 0; i < length; i++) {//for all
 		if (data[i]) {
 			cout << i << " " << data[i]->data->firstName << " " << data[i]->data->lastName 
-				<< "(" << data[i]->data->id << ")";
+				<< "(" << data[i]->data->id << ")";//print it
 
-			if (data[i]->next) {
+			if (data[i]->next) {//if it has a next
 				cout  << " -> " << data[i]->next->data->firstName << " " << data[i]->next->data->lastName 
-					<< "(" << data[i]->next->data->id << ")";
+					<< "(" << data[i]->next->data->id << ")";//print it
 			}
 			cout << endl;
 		}
 	}
 }
-/*
-int HashTable::countThings(HashEntry ** in, size_t size)
-{
-	int h = 0;
-	for (int i = 0; i < size; i++) {
-		if (in[i]) {
-			if (in[i]->next) {
-				h++;
-			}
-			h++;
-		}
-		
-	}
-	return h;
-}
-*/
-

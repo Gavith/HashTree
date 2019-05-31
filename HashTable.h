@@ -11,6 +11,11 @@ struct Student {
 		firstName = new char[20];
 		lastName = new char[20];
 	}
+
+	~Student() {
+		delete[] firstName;
+		delete[] lastName;
+	}
 };
 
 struct HashEntry {
@@ -25,6 +30,10 @@ struct HashEntry {
 	HashEntry(Student* data) {
 		this->data = data;
 		next = nullptr;
+	}
+
+	~HashEntry() {
+		delete data;
 	}
 };
 
